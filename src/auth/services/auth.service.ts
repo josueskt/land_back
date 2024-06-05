@@ -31,14 +31,13 @@ export class AuthService {
     where: [{ nombreUsuario: nombreUsuario }, { email: email }],
   });
   if (exists)
-    throw new BadRequestException(new MessageDto('ese usuario ya existe'));
+   return new MessageDto('ese usuario ya existe');
   const rolUser = await this.rolRepository.findOne({
     where: { nombre: RoleEnum.USER },
   });
   if (!rolUser)
-    throw new InternalServerErrorException(
-      new MessageDto('los roles aún no han sido creados'),
-    );
+    return new MessageDto('los roles aún no han sido creados');
+
   const user = this.authRepository.create(dto);
   user.roles = [rolUser];
   await this.authRepository.save(user);
