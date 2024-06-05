@@ -73,7 +73,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       if (roomId !== 'login' && roomId !=='register' ) {
         try {
-          var clients = await this.user.getAll_space(roomId);
+          let clients = await this.user.getAll_space(roomId);
           client.to(roomId).emit('conectados', clients);
           client.emit('message', `Bienvenido a la sala ${roomId}, tu ID de usuario es ${client.id}`);
         } catch (error) {
@@ -105,19 +105,20 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(`Message from ${client.id} in room ${roomId}: ${message}`);
     client.to(roomId).emit('message', message);
   }
+
   //logica del login
   @SubscribeMessage('sendtoken')
-  async handleToken(@MessageBody() token_send: { "email": string, "password": string }, @ConnectedSocket() client: Socket) {
+  async handleToken(@MessageBody() token_send: { "nombreUsuario": string, "password": string }, @ConnectedSocket() client: Socket) {
     const toke = client.handshake.query.authorization as string;
 
     const user = new UsuarioEntity
-    user.email = token_send.email
+    user.nombreUsuario = token_send.nombreUsuario
     user.password = token_send.password
     if(toke){
       client.disconnect()
     }
      const token =  await this.auth.login(user)
-    client.emit('token', token.token);
+    client.emit('token', token);
   }
 
 

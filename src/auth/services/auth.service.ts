@@ -100,7 +100,7 @@ export class AuthService {
   async login(dto: LoginUsuarioDto): Promise<any> {
     const { nombreUsuario } = dto;
     const usuario = await this.authRepository.findOne({
-      where: [ { email: nombreUsuario }],
+      where: [ { email: nombreUsuario }, {nombreUsuario: nombreUsuario}],
     });
     if (!usuario)
       return new UnauthorizedException(new MessageDto('no existe el usuario'));
