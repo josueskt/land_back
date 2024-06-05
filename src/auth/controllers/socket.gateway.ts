@@ -29,17 +29,23 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleConnection(client: Socket) {
     const roomId = client.handshake.query.roomId as string;
     const token = client.handshake.headers.authorization;
-    if (!token && roomId !== 'login' ) {
+    if (!token && (roomId !== 'login' && roomId !== 'register')) {
+      console.log("que fie")
       client.disconnect();
       return;
     } else {
 
       
 
-      if (roomId == 'login') {
+      if (roomId == 'login' ) {
 
         console.log("holasdasdsadasdsadasdsadasds")
-      } else if(roomId =='login') {
+      }else if(roomId == 'register'){
+
+        console.log('register')
+      }
+      
+      else if(roomId !='login' && roomId !='register' ) {
 
         try {
           const decoded = jwt.verify(token, 'rMRd2023yAvi');
@@ -65,7 +71,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client.join(roomId);
       // await this.user.onconect_space(roomId, { id: client.id }, token);
 
-      if (roomId !== 'login' || 'register'  ) {
+      if (roomId !== 'login' && roomId !=='register' ) {
         try {
           var clients = await this.user.getAll_space(roomId);
           client.to(roomId).emit('conectados', clients);
