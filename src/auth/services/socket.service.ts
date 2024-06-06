@@ -110,12 +110,12 @@ session.user= usuer;
     }
   }
 
-  // async getAll_space(namespace: string) {
+  async getAll_space(namespace: string) {
 
-  //  const session =   await this.sesscion_s.findOneWithUserId(namespace)
-  //  console.log(session)
-  //   return session 
-  // }
+   const session =   await this.sesscion_s.findOneWithUserId(namespace)
+   console.log(session)
+    return session 
+  }
 
 
   

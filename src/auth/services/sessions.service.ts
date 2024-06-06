@@ -25,17 +25,17 @@ return "usuario creado"
         return this.sessionsRepository.findOne({ where: { id } });
       }
 
-      // async findOneWithUserId(id: string): Promise<{ session: SessionEntity, userId: string }> {
-      //   const session = await this.sessionsRepository.findOne({ where: { id }, relations: ['user'] });
+      async findOneWithUserId(id: string): Promise<{ session: SessionEntity, userId: string }> {
+        const session = await this.sessionsRepository.findOne({ where: { id }, relations: ['user'] });
     
-      //   if (!session) {
-      //     throw new Error('Sesión no encontrada');
-      //   }
+        if (!session) {
+          throw new Error('Sesión no encontrada');
+        }
     
-      //   const userId = session.user.id;
+        const userId = session.user.id;
     
-      //   return { session, userId };
-      // }
+        return { session, userId };
+      }
     
 
 
