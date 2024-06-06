@@ -13,9 +13,9 @@ export class SessionsService {
         private sessionsRepository: Repository<SessionEntity>,
       ) {}
     
-      save(secion:SessionEntity):string{
-        this.sessionsRepository.save(secion)
-return "usuario creado"
+      async save(secion:SessionEntity):Promise<string>{
+       await  this.sessionsRepository.save(secion)
+      return "usuario creado"
       }
       findAll(): Promise<SessionEntity[]> {
         return this.sessionsRepository.find();
@@ -26,11 +26,9 @@ return "usuario creado"
       }
 
       async findOneWithUserId(id: string): Promise<{ session: SessionEntity, userId: string }> {
+        setTimeout(()=>{},4000)
         const session = await this.sessionsRepository.findOne({ where: { id }, relations: ['user'] });
     
-        if (!session) {
-          throw new Error('Sesión no encontrada');
-        }
     
         const userId = session.user.id;
     

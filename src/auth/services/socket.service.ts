@@ -82,7 +82,7 @@ export class SocketService {
 
   private namespaceClients: { [namespace: string]: { [id: string]: CLient } } = {};
 
-  onconect_space(namespace: string, client: CLient , token:string) {
+  async onconect_space(namespace: string, client: CLient , token:string) {
     if (!this.namespaceClients[namespace]) {
       this.namespaceClients[namespace] = {};
     }
@@ -97,7 +97,7 @@ usuer.id = idExtraido
 session.id = namespace.toString()
 session.user= usuer;
 //session.user = {"id":token}
-  this.sesscion_s.save(session)
+  await this.sesscion_s.save(session)
     this.namespaceClients[namespace][client.id] = client;
   }
 
@@ -113,7 +113,7 @@ session.user= usuer;
   async getAll_space(namespace: string) {
 
    const session =   await this.sesscion_s.findOneWithUserId(namespace)
-   console.log(session)
+   console.log(session.session.id)
     return session 
   }
 

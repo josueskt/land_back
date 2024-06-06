@@ -25,12 +25,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private user: SocketService,
     private auth: AuthService,
   ) {}
-
+// conexion de entrada 
   async handleConnection(client: Socket) {
     const roomId = client.handshake.query.roomId as string;
     const token = client.handshake.headers.authorization;
     if (!token && roomId !== 'login' && roomId !== 'register') {
-      console.log('que fie');
       client.disconnect();
       return;
     } else {
@@ -38,7 +37,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         console.log('holasdasdsadasdsadasdsadasds');
       } else if (roomId == 'register') {
         console.log('register');
-      } else if (roomId != 'login' && roomId != 'register') {
+      } else 
+      if (roomId != 'login' && roomId != 'register') {
         try {
           const decoded = jwt.verify(token, 'rMRd2023yAvi');
           if (!decoded) {
@@ -55,27 +55,31 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     if (roomId) {
-      client.join(roomId);
-       await this.user.onconect_space(roomId, { id: client.id }, token);
+      try {
+        // Esperar a que se complete la operación onconect_space
+        await this.user.onconect_space(roomId, { id: client.id }, token);
+        
+        // Unirse a la sala
+        client.join(roomId);
+    
+        if (roomId !== 'login' && roomId !== 'register') {
+          let clients = await this.user.getAll_space(roomId);
+          
+          // Simular un retraso de 2 segundos antes de enviar la respuesta
+          setTimeout(() => {
+            client.to(roomId).emit('conectados', clients);
 
-      if (roomId !== 'login' && roomId !== 'register') {
-        try {
-          console.log(roomId)
-         let clients = await this.user.getAll_space(roomId);
-         client.to(roomId).emit('conectados', clients);
-          client.emit(  
-            'message',
-            `Bienvenido a la sala ${roomId}, tu ID de usuario es ${client.id}`,
-          );
-        } catch (error) {
-          console.error('Error al obtener los clientes:', error);
+          }, 2000); // Retraso de 2 segundos (2000 milisegundos)
         }
+      } catch (error) {
+        console.error('Error al obtener los clientes:', error);
       }
     } else {
       console.log('No se proporcionó el ID de la sala');
     }
+    
   }
-
+// desconecion
   handleDisconnect(client: Socket) {
     const roomId = client.handshake.query.roomId as string;
     if (roomId) {
