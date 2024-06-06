@@ -60,8 +60,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       if (roomId !== 'login' && roomId !== 'register') {
         try {
-          let clients = await this.user.getAll_space(roomId);
-          client.to(roomId).emit('conectados', clients);
+       //   let clients = await this.user.getAll_space(roomId);
+        //  client.to(roomId).emit('conectados', clients);
           client.emit(
             'message',
             `Bienvenido a la sala ${roomId}, tu ID de usuario es ${client.id}`,
@@ -80,8 +80,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (roomId) {
       console.log(`Client ${client.id} disconnected from room ${roomId}`);
       this.user.ondisconected_space(roomId, client.id);
-      const clients = this.user.getAll_space(roomId);
-      client.to(roomId).emit('conectados', clients);
+   //   const clients = this.user.getAll_space(roomId);
+   //   client.to(roomId).emit('conectados', clients);
     }
   }
 
@@ -110,7 +110,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client.disconnect();
     }
     const token = await this.auth.login(user);
-    client.emit('token', token);
+    console.log(token)
+    client.emit('login', token);
   }
 
   @SubscribeMessage('sendUser')

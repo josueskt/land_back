@@ -1,12 +1,9 @@
 import {
   Entity,
   Column,
-  PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
   PrimaryColumn,
-  ManyToMany,
-  JoinTable,
 } from 'typeorm';
 import { UsuarioEntity } from './auth.entity';
 import { DevicesEntity } from './devices.entity';
