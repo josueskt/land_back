@@ -12,6 +12,9 @@ export class SessionsService {
         @InjectRepository(SessionEntity)
         private sessionsRepository: Repository<SessionEntity>,
       ) {}
+
+
+      
     
       async save(secion:SessionEntity):Promise<string>{
        await  this.sessionsRepository.save(secion)
@@ -21,6 +24,7 @@ export class SessionsService {
         return this.sessionsRepository.find();
       }
     
+      
       findOne(id: string): Promise<SessionEntity> {
         return this.sessionsRepository.findOne({ where: { id } });
       }
