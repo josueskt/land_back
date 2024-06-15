@@ -30,7 +30,8 @@ export class SessionsService {
         const session = await this.sessionsRepository.findOne({ where: { id }, relations: ['user'] });
     
     
-        const userId = session.user.id;
+      //  const userId = session.user.id;
+      const userId = "1";
     
         return { session, userId };
       }
